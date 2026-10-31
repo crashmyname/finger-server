@@ -13,6 +13,7 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME || 'finger_db',
     waitForConnections: true,
     connectionLimit: 10,
+    dateStrings: true,
 });
 
 app.use(express.text({ type: 'text/plain', limit: '10mb' }));
@@ -432,7 +433,7 @@ async function load() {
     <div class="card"><div class="num">\${s.devices.total}</div><div class="lbl">Device</div></div>
   \`;
 
-  const today = new Date().toISOString().slice(0,10);
+  const today = new Intl.DateTimeFormat('en-CA').format(new Date());
   const a = await (await fetch('/api/attendance?date=' + today + '&limit=50')).json();
   const tbody = document.querySelector('#att tbody');
   tbody.innerHTML = a.data.length
